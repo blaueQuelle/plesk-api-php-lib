@@ -3,7 +3,9 @@
 
 namespace PleskX\Api\Struct\Git;
 
-class Info extends \PleskX\Api\Struct
+use PleskX\Api\Struct;
+
+class Info extends Struct
 {
     /** @var int */
     public int $uid;
