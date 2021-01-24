@@ -8,7 +8,7 @@ class Operator
     /** @var string|null */
     protected $_wrapperTag = null;
 
-    /** @var \PleskX\Api\Client */
+    /** @var Client */
     protected $_client;
 
     public function __construct($client)
@@ -29,8 +29,9 @@ class Operator
      * @param int $mode
      *
      * @return XmlResponse
+     * @throws \PleskX\Api\Client\Exception|Exception
      */
-    public function request($request, $mode = Client::RESPONSE_SHORT)
+    public function request($request, $mode = Client::RESPONSE_SHORT): XmlResponse
     {
         $wrapperTag = $this->_wrapperTag;
 
@@ -51,8 +52,10 @@ class Operator
      * @param string $deleteMethodName
      *
      * @return bool
+     * @throws Client\Exception
+     * @throws Exception
      */
-    protected function _delete($field, $value, $deleteMethodName = 'del')
+    protected function _delete(string $field, $value, $deleteMethodName = 'del'): bool
     {
         $response = $this->request([
             $deleteMethodName => [
@@ -73,8 +76,10 @@ class Operator
      * @param callable|null $filter
      *
      * @return mixed
+     * @throws Exception ;
+     * @throws Client\Exception ;
      */
-    protected function _getItems($structClass, $infoTag, $field = null, $value = null, callable $filter = null)
+    protected function _getItems(string $structClass, string $infoTag, $field = null, $value = null, callable $filter = null): array
     {
         $packet = $this->_client->getPacket();
         $getTag = $packet->addChild($this->_wrapperTag)->addChild('get');
@@ -86,7 +91,7 @@ class Operator
 
         $getTag->addChild('dataset')->addChild($infoTag);
 
-        $response = $this->_client->request($packet, \PleskX\Api\Client::RESPONSE_FULL);
+        $response = $this->_client->request($packet, Client::RESPONSE_FULL);
 
         $items = [];
         foreach ($response->xpath('//result') as $xmlResult) {

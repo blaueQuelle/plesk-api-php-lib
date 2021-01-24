@@ -3,16 +3,22 @@
 
 namespace PleskX\Api\Operator;
 
+use PleskX\Api\Client;
+use PleskX\Api\Exception;
+use PleskX\Api\Operator;
 use PleskX\Api\Struct\Database as Struct;
+use PleskX\Api\XmlResponse;
 
-class Database extends \PleskX\Api\Operator
+class Database extends Operator
 {
     /**
      * @param array $properties
      *
      * @return Struct\Info
+     * @throws Exception ;
+     * @throws Client\Exception
      */
-    public function create($properties)
+    public function create(array $properties): Struct\Info
     {
         return new Struct\Info($this->_process('add-db', $properties));
     }
@@ -21,8 +27,10 @@ class Database extends \PleskX\Api\Operator
      * @param array $properties
      *
      * @return Struct\UserInfo
+     * @throws Exception ;
+     * @throws Client\Exception
      */
-    public function createUser($properties)
+    public function createUser(array $properties): Struct\UserInfo
     {
         return new Struct\UserInfo($this->_process('add-db-user', $properties));
     }
@@ -31,9 +39,11 @@ class Database extends \PleskX\Api\Operator
      * @param string $command
      * @param array $properties
      *
-     * @return \PleskX\Api\XmlResponse
+     * @return XmlResponse
+     * @throws Exception ;
+     * @throws Client\Exception
      */
-    private function _process($command, array $properties)
+    private function _process(string $command, array $properties): XmlResponse
     {
         $packet = $this->_client->getPacket();
         $info = $packet->addChild($this->_wrapperTag)->addChild($command);
@@ -53,8 +63,10 @@ class Database extends \PleskX\Api\Operator
      * @param array $properties
      *
      * @return bool
+     * @throws Exception;
+     * @throws Client\Exception
      */
-    public function updateUser(array $properties)
+    public function updateUser(array $properties): bool
     {
         $response = $this->_process('set-db-user', $properties);
 
@@ -66,8 +78,10 @@ class Database extends \PleskX\Api\Operator
      * @param int|string $value
      *
      * @return Struct\Info
+     * @throws Client\Exception
+     * @throws Exception
      */
-    public function get($field, $value)
+    public function get(string $field, $value): Struct\Info
     {
         $items = $this->getAll($field, $value);
 
@@ -79,8 +93,10 @@ class Database extends \PleskX\Api\Operator
      * @param int|string $value
      *
      * @return Struct\UserInfo
+     * @throws Client\Exception
+     * @throws Exception
      */
-    public function getUser($field, $value)
+    public function getUser(string $field, $value): Struct\UserInfo
     {
         $items = $this->getAllUsers($field, $value);
 
@@ -92,8 +108,10 @@ class Database extends \PleskX\Api\Operator
      * @param int|string $value
      *
      * @return Struct\Info[]
+     * @throws Client\Exception
+     * @throws Exception
      */
-    public function getAll($field, $value)
+    public function getAll(string $field, $value): array
     {
         $response = $this->_get('get-db', $field, $value);
         $items = [];
@@ -109,8 +127,10 @@ class Database extends \PleskX\Api\Operator
      * @param int|string $value
      *
      * @return Struct\UserInfo[]
+     * @throws Client\Exception
+     * @throws Exception
      */
-    public function getAllUsers($field, $value)
+    public function getAllUsers(string $field, $value): array
     {
         $response = $this->_get('get-db-users', $field, $value);
         $items = [];
@@ -126,9 +146,11 @@ class Database extends \PleskX\Api\Operator
      * @param string $field
      * @param int|string $value
      *
-     * @return \PleskX\Api\XmlResponse
+     * @return XmlResponse
+     * @throws Client\Exception
+     * @throws Exception
      */
-    private function _get($command, $field, $value)
+    private function _get(string $command, string $field, $value): XmlResponse
     {
         $packet = $this->_client->getPacket();
         $getTag = $packet->addChild($this->_wrapperTag)->addChild($command);
@@ -138,9 +160,7 @@ class Database extends \PleskX\Api\Operator
             $filterTag->addChild($field, $value);
         }
 
-        $response = $this->_client->request($packet, \PleskX\Api\Client::RESPONSE_FULL);
-
-        return $response;
+        return $this->_client->request($packet, Client::RESPONSE_FULL);
     }
 
     /**
@@ -148,8 +168,10 @@ class Database extends \PleskX\Api\Operator
      * @param int|string $value
      *
      * @return bool
+     * @throws Client\Exception
+     * @throws Exception
      */
-    public function delete($field, $value)
+    public function delete(string $field, $value): bool
     {
         return $this->_delete($field, $value, 'del-db');
     }
@@ -159,8 +181,10 @@ class Database extends \PleskX\Api\Operator
      * @param int|string $value
      *
      * @return bool
+     * @throws Client\Exception
+     * @throws Exception
      */
-    public function deleteUser($field, $value)
+    public function deleteUser(string $field, $value): bool
     {
         return $this->_delete($field, $value, 'del-db-user');
     }

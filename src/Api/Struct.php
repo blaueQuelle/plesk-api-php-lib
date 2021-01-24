@@ -3,8 +3,16 @@
 
 namespace PleskX\Api;
 
+use ReflectionProperty;
+use SimpleXMLElement;
+
 abstract class Struct
 {
+    /**
+     * @param $property
+     * @param $value
+     * @throws \Exception
+     */
     public function __set($property, $value)
     {
         throw new \Exception("Try to set an undeclared property '$property'.");
@@ -13,12 +21,12 @@ abstract class Struct
     /**
      * Initialize list of scalar properties by response.
      *
-     * @param \SimpleXMLElement $apiResponse
+     * @param SimpleXMLElement $apiResponse
      * @param array $properties
      *
      * @throws \Exception
      */
-    protected function _initScalarProperties($apiResponse, array $properties)
+    protected function _initScalarProperties(SimpleXMLElement $apiResponse, array $properties)
     {
         foreach ($properties as $property) {
             if (is_array($property)) {
@@ -29,7 +37,7 @@ abstract class Struct
                 $value = $apiResponse->$property;
             }
 
-            $reflectionProperty = new \ReflectionProperty($this, $classPropertyName);
+            $reflectionProperty = new ReflectionProperty($this, $classPropertyName);
             $docBlock = $reflectionProperty->getDocComment();
             $propertyType = preg_replace('/^.+ @var ([a-z]+) .+$/', '\1', $docBlock);
 
@@ -54,7 +62,7 @@ abstract class Struct
      *
      * @return string
      */
-    private function _underToCamel($under)
+    private function _underToCamel(string $under): string
     {
         $under = '_'.str_replace('_', ' ', strtolower($under));
 

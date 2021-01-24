@@ -3,7 +3,10 @@
 
 namespace PleskX\Api\Struct\Customer;
 
-class Info extends \PleskX\Api\Struct
+use Exception;
+use PleskX\Api\Struct;
+
+class Info extends Struct
 {
     /** @var int */
     public $id;
@@ -11,6 +14,11 @@ class Info extends \PleskX\Api\Struct
     /** @var string */
     public $guid;
 
+    /**
+     * Info constructor.
+     * @param $apiResponse
+     * @throws Exception
+     */
     public function __construct($apiResponse)
     {
         $this->_initScalarProperties($apiResponse, [

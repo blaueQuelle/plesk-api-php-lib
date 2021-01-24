@@ -3,25 +3,43 @@
 
 namespace PleskX\Api\Operator;
 
+use PleskX\Api\Client;
+use PleskX\Api\Exception;
+use PleskX\Api\Operator;
 use PleskX\Api\Struct\Webspace as Struct;
 
-class Webspace extends \PleskX\Api\Operator
+class Webspace extends Operator
 {
-    public function getPermissionDescriptor()
+    /**
+     * @return Struct\PermissionDescriptor
+     * @throws Exception
+     * @throws Client\Exception
+     */
+    public function getPermissionDescriptor(): Struct\PermissionDescriptor
     {
         $response = $this->request('get-permission-descriptor.filter');
 
         return new Struct\PermissionDescriptor($response);
     }
 
-    public function getLimitDescriptor()
+    /**
+     * @return Struct\LimitDescriptor
+     * @throws Exception
+     * @throws Client\Exception
+     */
+    public function getLimitDescriptor(): Struct\LimitDescriptor
     {
         $response = $this->request('get-limit-descriptor.filter');
 
         return new Struct\LimitDescriptor($response);
     }
 
-    public function getPhysicalHostingDescriptor()
+    /**
+     * @return Struct\PhysicalHostingDescriptor
+     * @throws Exception
+     * @throws Client\Exception
+     */
+    public function getPhysicalHostingDescriptor(): Struct\PhysicalHostingDescriptor
     {
         $response = $this->request('get-physical-hosting-descriptor.filter');
 
@@ -33,8 +51,10 @@ class Webspace extends \PleskX\Api\Operator
      * @param int|string $value
      *
      * @return Struct\PhpSettings
+     * @throws Exception
+     * @throws Client\Exception
      */
-    public function getPhpSettings($field, $value)
+    public function getPhpSettings(string $field, $value): Struct\PhpSettings
     {
         $packet = $this->_client->getPacket();
         $getTag = $packet->addChild($this->_wrapperTag)->addChild('get');
@@ -42,7 +62,7 @@ class Webspace extends \PleskX\Api\Operator
         $getTag->addChild('filter')->addChild($field, $value);
         $getTag->addChild('dataset')->addChild('php-settings');
 
-        $response = $this->_client->request($packet, \PleskX\Api\Client::RESPONSE_FULL);
+        $response = $this->_client->request($packet, Client::RESPONSE_FULL);
 
         return new Struct\PhpSettings($response);
     }
@@ -53,7 +73,7 @@ class Webspace extends \PleskX\Api\Operator
      *
      * @return Struct\Limits
      */
-    public function getLimits($field, $value)
+    public function getLimits(string $field, $value): Struct\Limits
     {
         $items = $this->_getItems(Struct\Limits::class, 'limits', $field, $value);
 
@@ -66,8 +86,10 @@ class Webspace extends \PleskX\Api\Operator
      * @param $planName
      *
      * @return Struct\Info
+     * @throws Exception
+     * @throws Client\Exception
      */
-    public function create(array $properties, array $hostingProperties = null, $planName = null)
+    public function create(array $properties, array $hostingProperties = null, $planName = null): Struct\Info
     {
         $packet = $this->_client->getPacket();
         $info = $packet->addChild($this->_wrapperTag)->addChild('add');
@@ -104,8 +126,10 @@ class Webspace extends \PleskX\Api\Operator
      * @param int|string $value
      *
      * @return bool
+     * @throws Client\Exception
+     * @throws Exception
      */
-    public function delete($field, $value)
+    public function delete(string $field, $value): bool
     {
         return $this->_delete($field, $value);
     }
@@ -116,7 +140,7 @@ class Webspace extends \PleskX\Api\Operator
      *
      * @return Struct\GeneralInfo
      */
-    public function get($field, $value)
+    public function get(string $field, $value): Struct\GeneralInfo
     {
         $items = $this->_getItems(Struct\GeneralInfo::class, 'gen_info', $field, $value);
 

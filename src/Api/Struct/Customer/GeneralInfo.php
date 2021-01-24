@@ -3,7 +3,10 @@
 
 namespace PleskX\Api\Struct\Customer;
 
-class GeneralInfo extends \PleskX\Api\Struct
+use Exception;
+use PleskX\Api\Struct;
+
+class GeneralInfo extends Struct
 {
     /** @var string */
     public $company;
@@ -47,6 +50,11 @@ class GeneralInfo extends \PleskX\Api\Struct
     /** @var string */
     public $externalId;
 
+    /**
+     * GeneralInfo constructor.
+     * @param $apiResponse
+     * @throws Exception
+     */
     public function __construct($apiResponse)
     {
         $this->_initScalarProperties($apiResponse, [

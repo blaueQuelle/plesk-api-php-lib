@@ -3,14 +3,19 @@
 
 namespace PleskX\Api\Operator;
 
+use PleskX\Api\Client;
+use PleskX\Api\Client\Exception;
+use PleskX\Api\Operator;
 use PleskX\Api\Struct\Locale as Struct;
 
-class Locale extends \PleskX\Api\Operator
+class Locale extends Operator
 {
     /**
      * @param string|null $id
      *
      * @return Struct\Info|Struct\Info[]
+     * @throws Exception
+     * @throws \PleskX\Api\Exception
      */
     public function get($id = null)
     {
@@ -22,7 +27,7 @@ class Locale extends \PleskX\Api\Operator
             $filter->addChild('id', $id);
         }
 
-        $response = $this->_client->request($packet, \PleskX\Api\Client::RESPONSE_FULL);
+        $response = $this->_client->request($packet, Client::RESPONSE_FULL);
 
         foreach ($response->locale->get->result as $localeInfo) {
             $locales[(string) $localeInfo->info->id] = new Struct\Info($localeInfo->info);

@@ -148,6 +148,7 @@ class Client
      * @param int $mode
      *
      * @return XmlResponse
+     * @throws Exception|Client\Exception
      */
     public function request($request, $mode = self::RESPONSE_SHORT)
     {
@@ -222,11 +223,11 @@ class Client
      * @param $requests
      * @param int $mode
      *
-     * @throws Client\Exception
-     *
      * @return array
+     *@throws Client\Exception|Exception
+     *
      */
-    public function multiRequest($requests, $mode = self::RESPONSE_SHORT)
+    public function multiRequest($requests, $mode = self::RESPONSE_SHORT): array
     {
         $requestXml = $this->getPacket();
 
