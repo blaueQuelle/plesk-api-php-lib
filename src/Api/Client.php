@@ -593,4 +593,12 @@ class Client
     {
         return $this->_getOperator('PhpHandler');
     }
+
+    /**
+     * @return Operator\Git
+     */
+    public function git()
+    {
+        return $this->_getOperator('Git');
+    }
 }
