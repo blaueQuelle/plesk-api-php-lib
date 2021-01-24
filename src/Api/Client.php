@@ -601,4 +601,13 @@ class Client
     {
         return $this->_getOperator('Git');
     }
+
+    /**
+     * @return Operator\LetsEncrypt
+     */
+    public function letsEncrypt()
+    {
+        return $this->_getOperator('LetsEncrypt');
+    }
+
 }
