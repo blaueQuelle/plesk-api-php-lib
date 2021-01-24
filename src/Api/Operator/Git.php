@@ -1,11 +1,9 @@
 <?php
 
-
 namespace PleskX\Api\Operator;
 
 use PleskX\Api\Client\Exception;
 use PleskX\Api\Operator;
-use PleskX\Api\XmlResponse;
 use PleskX\Api\Struct\Git as Struct;
 
 class Git extends Operator
@@ -15,9 +13,10 @@ class Git extends Operator
      * @param string $name
      * @param string $deploymentMode
      * @param string $deploymentPath
+     * @return Struct\Info
      * @throws Exception|\PleskX\Api\Exception
      */
-    public function create(string $domain, string $name, string $deploymentMode = "auto", string $deploymentPath = "httpdocs")
+    public function create(string $domain, string $name, string $deploymentMode = "auto", string $deploymentPath = "httpdocs"): Struct\Info
     {
         $packet = $this->_client->getPacket();
         $info = $packet->addChild("extension")->addChild("call")->addChild("git")->addChild("create");
@@ -28,8 +27,6 @@ class Git extends Operator
 
         $response = $this->_client->request($packet);
 
-        ray($this, $packet, $info, $response);
-        return new Struct\Info($response);
-//        return $response->git->create->repository->url;
+        return new Struct\Info($response->git->create->repository);
     }
 }
