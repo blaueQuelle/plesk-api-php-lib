@@ -1,5 +1,6 @@
 # vendor
 /vendor/
+.idea/
 
 # tests
 /phpunit.xml
